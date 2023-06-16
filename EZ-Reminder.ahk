@@ -35,8 +35,8 @@ CreateReminder:
 	targetMinute := LTrim(savedMinute, "0")
 
 	; Convert the hour and minute to integers
-    targetHour := targetHour + 0
-    targetMinute := targetMinute + 0
+	targetHour := targetHour + 0
+	targetMinute := targetMinute + 0
 
 	; Set timePeriod to AM or PM
 	timePeriod := TimePeriodAM ? "AM" : "PM"
@@ -44,8 +44,10 @@ CreateReminder:
 	; Validate the time format.
 	if (!RegExMatch(targetHour, "^([1]?[0-9])$") || (!RegExMatch(targetMinute, "^([1-5]?[0-9])$") && targetMinute != "")) {
 		MsgBox, Invalid time! Please try again useing the 12-hour format hh:mm.
-		; I thought blanking these variables would be required before restarting the script. It seems to work the same without this line, but I'll comment it out here just in case I need it back...
+
+		; I thought blanking these variables would be required before restarting the script. It seems to work the same without this line, but I'll comment it out here just in case.
 		;note := hour := minute := targetHour := targetMinute := "" 
+
 		Gui, Destroy
 		GoSub, StartScript ; Go back to the beginning of the script.
 		return
@@ -67,12 +69,12 @@ CreateReminder:
 			Gui Show, xCenter yCenter, ` ` ` ` ` ` REMINDER!
 
 			; Blinking effect for the reminder box.
-            Loop 5 {
-                Gui Color, e53056 
-                Sleep, 500
-                Gui Color, 94C7CB
-                Sleep, 500
-            }
+			Loop 5 {
+				Gui Color, e53056 
+				Sleep, 500
+				Gui Color, 94c7cb
+				Sleep, 500
+			}
 
 			return
 		}
