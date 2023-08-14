@@ -59,6 +59,7 @@ CreateReminder:
 		targetMinute := 00
 	
 	; Loop once per second to check if the target hour/minute matches the current hour/minute.
+	; Probably will updated this to count milliseconds between now and the next target time and use SetTimer instead of looping
 	Loop {
 		if ((timePeriod = "AM" && targetHour = A_Hour && targetMinute = A_Min) || (timePeriod = "PM" && targetHour = A_Hour - 12 && targetMinute = A_Min)) {
 			; Create a new gui to pop up the reminder.
