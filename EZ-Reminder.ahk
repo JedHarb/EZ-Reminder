@@ -4,17 +4,19 @@ SetTitleMatchMode 3 ; Ensure that the #IfWinActive directive must match the wind
 
 StartScript:
 	; Create the reminder setup gui to ask for input.
-	Gui +ToolWindow
-	Gui, Add, Text, , Reminder Note
+	Gui, +ToolWindow ; ToolWindow does everything I want, except it removes all but the topmost thin-line border and I can't seem to get it back, even with +Border or WinSet, Style
+	Gui, Add, Text,, Reminder Note
 	Gui, Add, Edit, w100 vNote
-	Gui, Add, Text, , Reminder Time
-	Gui, Add, Edit, x10 w20 vHour, 
+	Gui, Add, Text,, Reminder Time
+	Gui, Add, Edit, x10 w20 vHour
 	Gui, Add, Text, x+2, ` :
-	Gui, Add, Edit, x+5 w20 vMinute, 
+	Gui, Add, Edit, x+5 w20 vMinute
 	Gui, Add, Radio, x+10 w40 vTimePeriodAM, AM
 	Gui, Add, Radio, y+1 w40 vTimePeriodPM Checked, PM
 	Gui, Add, Button, w100 x10 gCreateReminder, Create Reminder
 	Gui, Show
+	WinSet, Style, +0x400000, EZ-Reminder.ahk
+	
 return
 
 ; Pressing Enter clicks the Create Reminder button in the gui.
@@ -30,7 +32,7 @@ CreateReminder:
 	savedHour := Trim(Hour)
 	savedMinute := Trim(Minute)
 
-	; Trim leading 0s (because later, RegExMatch() returning the 0s counts as "false")
+	; Trim leading 0s (because later, RegExMatch() successfully returning the 0s counts as "false")
 	targetHour := LTrim(savedHour, "0")
 	targetMinute := LTrim(savedMinute, "0")
 
@@ -44,15 +46,15 @@ CreateReminder:
 	; Validate the time format.
 	if (!RegExMatch(targetHour, "^([1]?[0-9])$") || (!RegExMatch(targetMinute, "^([1-5]?[0-9])$") && targetMinute != "")) {
 		MsgBox, Invalid time! Please try again useing the 12-hour format hh:mm.
-
-		; I thought blanking these variables would be required before restarting the script. It seems to work the same without this line, but I'll comment it out here just in case.
+		; I thought blanking these variables would be required before restarting the script. It seems to work the same without this line, but I'll comment it out here just in case I need it back...
 		;note := hour := minute := targetHour := targetMinute := "" 
-
 		Gui, Destroy
 		GoSub, StartScript ; Go back to the beginning of the script.
 		return
 	}
 
+	if (savedMinute = "")
+		savedMinute := 00
 	if (targetMinute = "")
 		targetMinute := 00
 	
@@ -72,7 +74,7 @@ CreateReminder:
 			Loop 5 {
 				Gui Color, e53056 
 				Sleep, 500
-				Gui Color, 94c7cb
+				Gui Color, 94C7CB
 				Sleep, 500
 			}
 
